@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ফোকাস ভল্ট — স্টাডি ও লক্ষ্য অর্জন প্ল্যাটফর্ম</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans Bengali"', '"Hind Siliguri"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Soft Light Navy Blue Palette (একদম হালকা নেভি ব্লু) */
+    :root {
+      --bg-canvas: #eef3f9;
+      --bg-surface: #f9fbfe;
+      --bg-subtle: #e3ebf5;
+      --border-hairline: rgba(30, 58, 138, 0.14);
+      --border-strong: rgba(30, 58, 138, 0.24);
+      --text-primary: #132238;
+      --text-secondary: #2d4363;
+      --text-muted: #52698a;
+      --accent-navy: #1e3a8a;
+      --accent-sapphire: #2563eb;
+      --accent-emerald: #059669;
+      --accent-emerald-bright: #10b981;
+      --accent-amber: #b45309;
+      --accent-rose: #be123c;
+      --radius-panel: 20px;
+      --shadow-surface: 0 10px 28px -12px rgba(23, 52, 99, 0.11), 0 2px 6px -1px rgba(23, 52, 99, 0.05);
+      --shadow-elevated: 0 18px 38px -14px rgba(23, 52, 99, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Noto Sans Bengali", "Hind Siliguri", system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      background-image:
+        radial-gradient(circle at 10% 6%, rgba(37, 99, 235, 0.1), transparent 44%),
+        radial-gradient(circle at 90% 12%, rgba(30, 58, 138, 0.08), transparent 42%),
+        linear-gradient(180deg, #f5f8fc 0%, #e8eff8 100%);
+    }
+
+    /* Keep Bengali digits (especially '১') crisp without Latin tabular-nums glyph distortion */
+    .bn-num,
+    .tabular {
+      font-family: "Noto Sans Bengali", "Hind Siliguri", sans-serif;
+      font-variant-numeric: normal;
+      font-feature-settings: "kern" 1, "liga" 1;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 56px;
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        padding: 28px 24px 64px;
+      }
+    }
+
+    .exec-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-panel);
+      box-shadow: var(--shadow-surface);
+    }
+
+    /* Completed Subject Card Emerald Glow */
+    .subject-card-completed {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.13), rgba(236, 253, 245, 0.85));
+      border-color: rgba(5, 150, 105, 0.65);
+      box-shadow:
+        0 0 0 1px rgba(16, 185, 129, 0.25),
+        0 10px 24px -8px rgba(5, 150, 105, 0.22);
+    }
+
+    .subject-completed-pill {
+      background: rgba(16, 185, 129, 0.16);
+      color: #065f46;
+      border: 1px solid rgba(5, 150, 105, 0.55);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .subject-glow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: #059669;
+      box-shadow: 0 0 8px #10b981, 0 0 14px rgba(16, 185, 129, 0.7);
+    }
+
+    /* Subject Form Emerald Glow: ON when validly filled, OFF when incomplete (no status text) */
+    .form-complete-glow {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(236, 253, 245, 0.82));
+      border-color: rgba(5, 150, 105, 0.82);
+      box-shadow:
+        0 0 0 1px rgba(16, 185, 129, 0.3),
+        0 0 22px -2px rgba(16, 185, 129, 0.32),
+        inset 0 0 12px rgba(16, 185, 129, 0.08);
+    }
+
+    .form-lamp-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      background-color: #bfcfe3;
+      border: 1px solid rgba(30, 58, 138, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .form-lamp-dot.is-lit {
+      background-color: #10b981;
+      border-color: #047857;
+      box-shadow: 0 0 10px #10b981, 0 0 16px rgba(16, 185, 129, 0.7);
+    }
+
+    /* Circular Countdown Ring (viewBox="0 0 240 240", center 120,120, radius 106) */
+    .ring-wrap {
+      position: relative;
+      width: 244px;
+      height: 244px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 9999px;
+      overflow: hidden;
+      background: #f2f6fc;
+      border: 1px solid rgba(30, 58, 138, 0.12);
+    }
+
+    @media (min-width: 480px) {
+      .ring-wrap {
+        width: 268px;
+        height: 268px;
+      }
+    }
+
+    .ring-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      overflow: hidden;
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: #d7e3f2;
+      stroke-width: 10;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: url(#timerRingGrad);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.2s linear;
+      filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.22));
+    }
+
+    .ring-progress.is-paused {
+      filter: drop-shadow(0 0 6px rgba(180, 83, 9, 0.26));
+    }
+
+    .ring-progress.is-completed {
+      filter: drop-shadow(0 0 8px rgba(5, 150, 105, 0.35));
+    }
+
+    .ring-center {
+      position: relative;
+      z-index: 2;
+      width: 72%;
+      max-width: 186px;
+      max-height: 72%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 9999px;
+      background: rgba(249, 251, 254, 0.96);
+      overflow: hidden;
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 80;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -16px;
+      border-radius: 3px;
+      animation: confettiFall var(--dur, 2.2s) cubic-bezier(0.25, 0.8, 0.4, 1) forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate3d(0, -10px, 0) rotate(0deg);
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(var(--drift, 40px), 100vh, 0) rotate(680deg);
+        opacity: 0;
+      }
+    }
+
+    .toast-region {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: min(390px, calc(100vw - 32px));
+      pointer-events: none;
+    }
+
+    .toast-card {
+      pointer-events: auto;
+      background: #f9fbfe;
+      border: 1px solid rgba(30, 58, 138, 0.26);
+      border-radius: 16px;
+      padding: 13px 15px;
+      box-shadow: var(--shadow-elevated);
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .toast-card.is-reward {
+      border-color: rgba(5, 150, 105, 0.65);
+      box-shadow: 0 18px 36px -12px rgba(5, 150, 105, 0.22);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e4ecf6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b6c7de;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8fa6c7;
+    }
+  </style>
+</head>
+<body>
+  <div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
+  <div id="toastRegion" class="toast-region" role="status" aria-live="polite"></div>
+
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="exec-card p-5 md:p-6 mb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div
+          class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 border border-blue-900/20 bg-blue-100/90 text-blue-900"
+          aria-hidden="true"
+        >
+          🏛
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#132238]">
+              ফোকাস ভল্ট
+            </h1>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100/80 text-blue-900 border border-blue-200/90">
+              স্টাডি ও লক্ষ্য অর্জন প্ল্যাটফর্ম
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-[#475d7a] mt-0.5 leading-relaxed">
+            সর্বনিম্ন <strong class="text-[#132238] font-bold bn-num">১৫ মিনিট</strong> ফোকাস টাইমার সেট করুন — সময় <strong class="text-emerald-700 font-bold bn-num">00:00</strong> শেষ হলেই অ্যাচিভমেন্ট ও পজিশন অর্জিত হবে।
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
+        <span
+          id="todayDatePill"
+          class="inline-flex items-center px-3 py-2 rounded-xl text-xs font-semibold bg-[#e9f0f8] text-[#2d4363] border border-blue-900/15 bn-num"
+        >
+          আজকের তারিখ
+        </span>
+
+        <button
+          id="muteToggleBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#e6eef8] hover:bg-[#d8e5f5] text-[#132238] border border-blue-900/15 transition cursor-pointer"
+          aria-pressed="false"
+        >
+          <span id="muteIcon" aria-hidden="true">🔔</span>
+          <span id="muteLabel">সাউন্ড চালু</span>
+        </button>
+
+        <button
+          id="resetTodayBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-rose-50/90 hover:bg-rose-100 text-rose-800 border border-rose-300/80 transition cursor-pointer"
+        >
+          <span aria-hidden="true">↺</span>
+          <span id="resetTodayLabel">আজকের অগ্রগতি রিসেট</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- RANK / PRESTIGE LADDER BANNER -->
+    <section
+      aria-label="শিক্ষার্থীর পজিশন ও মর্যাদা"
+      class="exec-card p-5 md:p-6 mb-5"
+      style="background: linear-gradient(135deg, #f9fbfe 0%, #edf3fb 60%, #e3edf9 100%); border-color: rgba(30, 58, 138, 0.2);"
+    >
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+        <div class="lg:col-span-7 flex items-start sm:items-center gap-4">
+          <div
+            id="rankBadgeIcon"
+            class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-blue-900/15 bg-blue-100/80 text-blue-900"
+            aria-hidden="true"
+          >
+            🌱
+          </div>
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-900 text-blue-50">
+                বর্তমান পজিশন
+              </span>
+              <span
+                id="rankPositionPill"
+                class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100/90 text-blue-900 border border-blue-300/80 bn-num"
+              >
+                ধাপ ১ / ৪
+              </span>
+            </div>
+            <h2 id="rankTitleText" class="text-xl sm:text-2xl font-bold text-[#132238] mt-1">
+              নতুন শিক্ষার্থী
+            </h2>
+            <p id="rankDescText" class="text-xs sm:text-sm text-[#475d7a] mt-0.5">
+              সাবজেক্টের টাইমার শেষ করে প্রথম অ্যাচিভমেন্ট জিতুন এবং নিষ্ঠাবান পাঠক পজিশনে উঠুন!
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-[#f4f8fd]/95 border border-blue-900/15 rounded-2xl p-4">
+          <div class="flex items-center justify-between gap-2 text-xs font-semibold mb-2">
+            <span id="rankProgressLabel" class="text-blue-950 bn-num">পরবর্তী ধাপ: ০ / ২ অ্যাচিভমেন্ট</span>
+            <span id="rankPercentText" class="text-[#475d7a] bn-num">০%</span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-[#dce6f3] overflow-hidden">
+            <div
+              id="rankProgressBar"
+              class="h-full rounded-full transition-all duration-500"
+              style="width: 0%; background: linear-gradient(90deg, #2563eb, #1e3a8a, #059669);"
+            ></div>
+          </div>
+          <div id="rankLadderChips" class="flex flex-wrap gap-1.5 mt-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS ROW -->
+    <section aria-label="সারসংক্ষেপ পরিসংখ্যান" class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 md:gap-4 mb-5">
+      <article class="exec-card p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-blue-100/85 text-blue-900 border border-blue-200/90">
+          ⏱
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs text-[#52698a] font-medium">মোট ফোকাস সময়</div>
+          <div id="statTotalMinutes" class="text-lg sm:text-xl font-bold text-[#132238] bn-num mt-0.5">০ মিনিট</div>
+          <div id="statTodaySub" class="text-[11px] text-[#52698a] bn-num">আজ: ০ মিনিট</div>
+        </div>
+      </article>
+
+      <article class="exec-card p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-amber-100/80 text-amber-800 border border-amber-300/70">
+          🏆
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs text-[#52698a] font-medium">অর্জিত অ্যাচিভমেন্ট</div>
+          <div id="statTotalAchievements" class="text-lg sm:text-xl font-bold text-amber-900 bn-num mt-0.5">০টি পদক</div>
+          <div id="statAchievementSub" class="text-[11px] text-[#52698a]">পজিশন নির্ধারক সংগ্রহ</div>
+        </div>
+      </article>
+
+      <article class="exec-card p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-sky-100/85 text-sky-900 border border-sky-200/90">
+          ✓
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs text-[#52698a] font-medium">সম্পন্ন সেশন</div>
+          <div id="statCompletedSessions" class="text-lg sm:text-xl font-bold text-blue-950 bn-num mt-0.5">০টি</div>
+          <div id="statTodaySessionsSub" class="text-[11px] text-[#52698a] bn-num">আজ সম্পন্ন: ০টি</div>
+        </div>
+      </article>
+
+      <article class="exec-card p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-indigo-100/85 text-indigo-900 border border-indigo-200/90">
+          🔥
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs text-[#52698a] font-medium">ধারাবাহিক স্ট্রিক</div>
+          <div id="statStreak" class="text-lg sm:text-xl font-bold text-blue-950 bn-num mt-0.5">০ দিন</div>
+          <div class="text-[11px] text-[#52698a]">প্রতিদিন ফোকাস ধরে রাখুন</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- MAIN WORKSPACE: TIMER STAGE + SUBJECT SETUP -->
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <!-- TIMER PANEL -->
+      <section
+        id="timerPanel"
+        aria-label="কাউন্টডাউন স্টাডি টাইমার"
+        class="exec-card p-5 sm:p-6 lg:col-span-6"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-blue-900">
+              নির্বাচিত সাবজেক্ট
+            </div>
+            <h2 id="activeSubjectName" class="text-xl sm:text-2xl font-bold text-[#132238] truncate mt-0.5">
+              গণিত
+            </h2>
+            <p id="activeSubjectGoalText" class="text-xs sm:text-sm text-[#475d7a] bn-num mt-0.5">
+              নির্ধারিত সময়: ১৫ মিনিট · সাবজেক্ট পদক: ০টি
+            </p>
+          </div>
+          <span
+            id="timerStatusBadge"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-blue-100/80 text-blue-900 border border-blue-300/80 shrink-0"
+          >
+            <span id="statusDot" class="w-2 h-2 rounded-full bg-blue-700"></span>
+            <span id="timerStatusText">প্রস্তুত</span>
+          </span>
+        </div>
+
+        <!-- Circular Countdown Ring (240x240 viewBox, r=106) -->
+        <div class="ring-wrap my-4">
+          <svg class="ring-svg" viewBox="0 0 240 240" aria-hidden="true">
+            <defs>
+              <linearGradient id="timerRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#2563eb" />
+                <stop offset="55%" stop-color="#1e3a8a" />
+                <stop offset="100%" stop-color="#059669" />
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="120" cy="120" r="106" />
+            <circle
+              id="ringProgressCircle"
+              class="ring-progress"
+              cx="120"
+              cy="120"
+              r="106"
+            />
+          </svg>
+
+          <div class="ring-center">
+            <div id="countdownDisplay" class="text-3xl sm:text-4xl font-bold tracking-tight text-[#132238] bn-num leading-none">
+              15:00
+            </div>
+            <div id="countdownSubLabel" class="text-[11px] sm:text-xs text-[#475d7a] font-semibold bn-num mt-1.5 leading-tight truncate max-w-full">
+              লক্ষ্য: ১৫ মিনিট (সর্বনিম্ন ১৫মি)
+            </div>
+            <div id="countdownRewardPreview" class="text-[10px] sm:text-[11px] font-bold text-blue-900 bn-num mt-1 leading-tight line-clamp-2">
+              00:00 শেষ হলে +১ অ্যাচিভমেন্ট
+            </div>
+          </div>
+        </div>
+
+        <!-- Start / Pause & Cancel Controls (Strictly no manual complete or skip button) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <button
+            id="startPauseBtn"
+            type="button"
+            class="w-full py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base text-white flex items-center justify-center gap-2 shadow-sm transition cursor-pointer"
+            style="background: linear-gradient(135deg, #2563eb, #1e3a8a);"
+          >
+            <span id="startPauseIcon" aria-hidden="true">▶</span>
+            <span id="startPauseLabel">টাইমার শুরু করুন</span>
+          </button>
+
+          <button
+            id="cancelSessionBtn"
+            type="button"
+            class="w-full py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base text-rose-800 bg-rose-50/90 hover:bg-rose-100 border border-rose-300/80 flex items-center justify-center gap-2 transition cursor-pointer"
+          >
+            <span aria-hidden="true">✕</span>
+            <span id="cancelSessionLabel">রিসেট / সেশন বাতিল</span>
+          </button>
+        </div>
+
+        <!-- Strict Policy Box -->
+        <div
+          class="mt-4 p-3.5 rounded-xl bg-[#eef4fc] border border-blue-900/15 text-[#2d4363] text-xs leading-relaxed flex items-start gap-2.5"
+          role="note"
+        >
+          <span class="text-base shrink-0" aria-hidden="true">🔒</span>
+          <div>
+            <strong class="text-[#132238] font-bold">কঠোর ফোকাস নীতি:</strong>
+            সর্বনিম্ন সময় <strong class="text-blue-950 bn-num">১৫ মিনিট</strong>। সেশন শুরু হলে ম্যানুয়ালি শেষ বা স্কিপ করার কোনো বাটন নেই। আপনি শুধু <strong>Pause / Resume</strong> করতে পারবেন। টাইমার স্বয়ংক্রিয়ভাবে <strong class="bn-num">00:00</strong>-এ পৌঁছালেই অ্যাচিভমেন্ট যুক্ত হবে; মাঝপথে বাতিল করলে <strong class="bn-num">০ অ্যাচিভমেন্ট</strong> পাবেন।
+          </div>
+        </div>
+
+        <!-- Quick Subject Selector -->
+        <div class="mt-4 pt-4 border-t border-blue-900/12 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <label for="quickSubjectSelect" class="text-xs font-semibold text-[#2d4363]">
+            দ্রুত সাবজেক্ট নির্বাচন:
+          </label>
+          <select
+            id="quickSubjectSelect"
+            class="w-full sm:w-64 px-3.5 py-2.5 rounded-xl text-sm bg-[#f9fbfe] text-[#132238] border border-blue-900/20 focus:outline-none focus:border-blue-600 transition bn-num"
+          ></select>
+        </div>
+      </section>
+
+      <!-- SUBJECT & DURATION SETUP PANEL -->
+      <section
+        aria-label="সাবজেক্ট ও সময় সেটআপ"
+        class="exec-card p-5 sm:p-6 lg:col-span-6"
+      >
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-[#132238] flex items-center gap-2">
+              <span aria-hidden="true">📚</span>
+              <span>সাবজেক্ট ও সময় নির্ধারণ</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-[#475d7a] bn-num mt-0.5">
+              নিজের সাবজেক্ট, মিনিট (সর্বনিম্ন ১৫ মিনিট) ও টার্গেট সেশন লিখে তালিকায় যোগ করুন
+            </p>
+          </div>
+        </div>
+
+        <!-- Active Session Lock Notice -->
+        <div
+          id="sessionLockBanner"
+          class="hidden mb-4 p-3 rounded-xl bg-blue-100/80 border border-blue-300 text-blue-950 text-xs font-medium flex items-center gap-2"
+          role="status"
+        >
+          <span aria-hidden="true">🔒</span>
+          <span>
+            সেশন সক্রিয় রয়েছে! সাবজেক্ট যোগ, পরিবর্তন, মোছা বা সময় বদলানো লক করা আছে। প্রয়োজনে Pause করতে পারেন বা সেশন বাতিল করুন।
+          </span>
+        </div>
+
+        <!-- Subject Form: Emerald glow strictly ON when all fields validly filled (min 15m), no status text labels -->
+        <form id="subjectForm" class="space-y-3.5 bg-[#f2f6fc] border border-blue-900/15 rounded-2xl p-4 mb-5 transition-all duration-200" novalidate>
+          <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-blue-900/12">
+            <span class="text-xs font-bold text-[#2d4363]">সাবজেক্ট ফর্ম</span>
+            <span id="formReadyLampDot" class="form-lamp-dot" aria-hidden="true"></span>
+          </div>
+
+          <div>
+            <label for="subjectNameInput" class="block text-xs font-semibold text-[#132238] mb-1.5">
+              সাবজেক্টের নাম
+            </label>
+            <input
+              id="subjectNameInput"
+              type="text"
+              maxlength="60"
+              placeholder="যেমন: গণিত, পদার্থবিজ্ঞান, ইংরেজি, সাধারণ জ্ঞান..."
+              class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[#f9fbfe] text-[#132238] placeholder-[#7890b0] border border-blue-900/20 focus:outline-none focus:border-blue-600 transition"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="subjectMinutesInput" class="block text-xs font-semibold text-[#132238] bn-num mb-1.5">
+                পড়ার সময় (সর্বনিম্ন ১৫ মিনিট)
+              </label>
+              <input
+                id="subjectMinutesInput"
+                type="number"
+                min="15"
+                max="300"
+                value="15"
+                class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[#f9fbfe] text-[#132238] border border-blue-900/20 focus:outline-none focus:border-blue-600 transition bn-num"
+              />
+            </div>
+
+            <div>
+              <label for="subjectGoalSessionsInput" class="block text-xs font-semibold text-[#132238] mb-1.5">
+                টার্গেট সেশন সংখ্যা
+              </label>
+              <input
+                id="subjectGoalSessionsInput"
+                type="number"
+                min="1"
+                max="20"
+                value="1"
+                class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[#f9fbfe] text-[#132238] border border-blue-900/20 focus:outline-none focus:border-blue-600 transition bn-num"
+              />
+            </div>
+          </div>
+
+          <!-- Minute Presets (15m minimum enforced) -->
+          <div>
+            <div class="text-[11px] font-semibold text-[#52698a] bn-num mb-1.5">নির্ধারিত সময় প্রিসেট (সর্বনিম্ন ১৫ মিনিট):</div>
+            <div class="grid grid-cols-4 gap-2">
+              <button
+                type="button"
+                data-preset="15"
+                class="preset-btn py-2 rounded-xl text-xs font-bold bg-blue-900 text-white border border-blue-900 transition cursor-pointer bn-num"
+              >
+                ১৫ মিনিট
+              </button>
+              <button
+                type="button"
+                data-preset="25"
+                class="preset-btn py-2 rounded-xl text-xs font-bold bg-[#f9fbfe] hover:bg-blue-100/70 text-[#132238] border border-blue-900/20 transition cursor-pointer bn-num"
+              >
+                ২৫ মিনিট
+              </button>
+              <button
+                type="button"
+                data-preset="45"
+                class="preset-btn py-2 rounded-xl text-xs font-bold bg-[#f9fbfe] hover:bg-blue-100/70 text-[#132238] border border-blue-900/20 transition cursor-pointer bn-num"
+              >
+                ৪৫ মিনিট
+              </button>
+              <button
+                type="button"
+                data-preset="60"
+                class="preset-btn py-2 rounded-xl text-xs font-bold bg-[#f9fbfe] hover:bg-blue-100/70 text-[#132238] border border-blue-900/20 transition cursor-pointer bn-num"
+              >
+                ৬০ মিনিট
+              </button>
+            </div>
+          </div>
+
+          <p id="formErrorText" class="text-xs font-semibold text-rose-700 bn-num min-h-[18px]" role="alert"></p>
+
+          <button
+            id="addSubjectBtn"
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition cursor-pointer shadow-sm"
+            style="background: linear-gradient(135deg, #2563eb, #1e3a8a);"
+          >
+            <span aria-hidden="true">＋</span>
+            <span>সাবজেক্ট তালিকায় যোগ করুন</span>
+          </button>
+        </form>
+
+        <!-- Subjects List -->
+        <div class="flex items-center justify-between mb-2.5">
+          <h3 class="text-sm font-bold text-[#2d4363]">নির্ধারিত সাবজেক্ট তালিকা</h3>
+          <span id="subjectsCountBadge" class="text-xs text-[#52698a] bn-num">০টি সাবজেক্ট</span>
+        </div>
+        <div id="subjectsListContainer" class="space-y-3 max-h-[430px] overflow-y-auto pr-1"></div>
+      </section>
+    </main>
+
+    <!-- ACHIEVEMENT VAULT & TROPHY SHOWCASE -->
+    <section
+      aria-label="অর্জিত অ্যাচিভমেন্ট ভল্ট"
+      class="exec-card p-5 sm:p-6 mt-5"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div>
+          <h2 class="text-xl font-bold text-[#132238] flex items-center gap-2">
+            <span aria-hidden="true">🏅</span>
+            <span>অ্যাচিভমেন্ট ভল্ট ও পজিশন সংগ্রহ</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-[#475d7a] bn-num mt-0.5">
+            প্রতিটি সাবজেক্টের টাইমার 00:00 শেষ হলেই এখানে অ্যাচিভমেন্ট সংরক্ষিত হয় এবং আপনার পজিশন উচ্চতর ধাপে উন্নীত হয়
+          </p>
+        </div>
+        <span
+          id="achievementsBadgeCount"
+          class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-100/85 text-blue-950 border border-blue-300/80 bn-num"
+        >
+          মোট ০টি অ্যাচিভমেন্ট
+        </span>
+      </div>
+
+      <div id="achievementsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+    </section>
+
+    <footer class="text-center text-xs text-[#52698a] mt-8 leading-relaxed">
+      <strong class="text-[#2d4363] font-semibold">ফোকাস ভল্ট</strong> — আপনার সাবজেক্ট তালিকা, ফোকাস পরিসংখ্যান, অ্যাচিভমেন্ট ও পজিশন ব্রাউজারের <code class="text-[#2d4363]">localStorage</code>-এ সংরক্ষিত থাকে।
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE_KEY = "focus_vault_bangla_study_v1";
+      const MIN_STUDY_MINUTES = 15;
+      const MAX_STUDY_MINUTES = 300;
+      const RING_RADIUS = 106;
+      const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+      // Exact Rank / Prestige progression ladder
+      const RANK_TIERS = [
+        {
+          level: 1,
+          minAchievements: 0,
+          icon: "🌱",
+          titleBn: "নতুন শিক্ষার্থী",
+          desc: "সর্বনিম্ন ১৫ মিনিটের টাইমার 00:00 শেষ করে নতুন শিক্ষার্থী থেকে নিষ্ঠাবান পাঠক পজিশনে উঠুন!"
+        },
+        {
+          level: 2,
+          minAchievements: 2,
+          icon: "📖",
+          titleBn: "নিষ্ঠাবান পাঠক",
+          desc: "আপনি নিয়মিত সময় ধরে ফোকাস সেশন সম্পন্ন করেছেন এবং নিষ্ঠাবান পাঠক পজিশনে উন্নীত হয়েছেন!"
+        },
+        {
+          level: 3,
+          minAchievements: 5,
+          icon: "⚡",
+          titleBn: "ফোকাস মাস্টার",
+          desc: "কঠোর মনোযোগে একাধিক সেশন পূর্ণ করে আপনি ফোকাস মাস্টার মর্যাদা অর্জন করেছেন!"
+        },
+        {
+          level: 4,
+          minAchievements: 9,
+          icon: "👑",
+          titleBn: "অ্যাচিভমেন্ট লিজেন্ড",
+          desc: "সর্বোচ্চ অ্যাচিভমেন্ট লিজেন্ড পজিশন অর্জিত! আপনার একাগ্রতা ও ধারাবাহিকতা অনুকরণীয়।"
+        }
+      ];
+
+      function getMedalStyle(minutes) {
+        if (minutes >= 60) {
+          return { badge: "💎", tierBn: "ডায়মন্ড সম্মাননা", accentClass: "border-sky-300 bg-sky-100/60 text-sky-950" };
+        }
+        if (minutes >= 45) {
+          return { badge: "🥇", tierBn: "গোল্ড পদক", accentClass: "border-amber-300 bg-amber-100/60 text-amber-950" };
+        }
+        if (minutes >= 25) {
+          return { badge: "🥈", tierBn: "সিলভার পদক", accentClass: "border-blue-300 bg-blue-100/65 text-blue-950" };
+        }
+        return { badge: "🥉", tierBn: "ব্রোঞ্জ পদক", accentClass: "border-emerald-300 bg-emerald-100/55 text-emerald-950" };
+      }
+
+      function getTodayKey() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, "0");
+        const d = String(now.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      }
+
+      function getYesterdayKey() {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
+      }
+
+      function formatBanglaDate() {
+        try {
+          return new Date().toLocaleDateString("bn-BD", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          });
+        } catch (_) {
+          return getTodayKey();
+        }
+      }
+
+      function formatBanglaTimeNow() {
+        try {
+          return new Date().toLocaleTimeString("bn-BD", {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+        } catch (_) {
+          return "";
+        }
+      }
+
+      function formatCountdown(totalSec) {
+        const safe = Math.max(0, Math.floor(totalSec));
+        const hours = Math.floor(safe / 3600);
+        const mins = Math.floor((safe % 3600) / 60);
+        const secs = safe % 60;
+        if (hours > 0) {
+          return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+        }
+        return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      }
+
+      function escapeHtml(str) {
+        return String(str ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function createDefaultSubjects() {
+        return [
+          {
+            id: "subj-math",
+            name: "গণিত",
+            minutes: 15,
+            goalSessions: 2,
+            completedSessions: 0,
+            earnedAchievements: 0
+          },
+          {
+            id: "subj-physics",
+            name: "পদার্থবিজ্ঞান",
+            minutes: 25,
+            goalSessions: 2,
+            completedSessions: 0,
+            earnedAchievements: 0
+          },
+          {
+            id: "subj-english",
+            name: "ইংরেজি",
+            minutes: 15,
+            goalSessions: 1,
+            completedSessions: 0,
+            earnedAchievements: 0
+          }
+        ];
+      }
+
+      function clampStudyMinutes(val) {
+        const num = Number(val);
+        if (!Number.isFinite(num)) return MIN_STUDY_MINUTES;
+        return Math.min(MAX_STUDY_MINUTES, Math.max(MIN_STUDY_MINUTES, Math.round(num)));
+      }
+
+      function loadState() {
+        const today = getTodayKey();
+        const fallback = {
+          dateKey: today,
+          muted: false,
+          activeSubjectId: "subj-math",
+          subjects: createDefaultSubjects(),
+          achievements: [],
+          stats: {
+            totalMinutes: 0,
+            todayMinutes: 0,
+            totalSessions: 0,
+            todaySessions: 0,
+            streakDays: 0,
+            lastStudyDate: null
+          }
+        };
+
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+
+          const subjects = Array.isArray(parsed.subjects) && parsed.subjects.length > 0
+            ? parsed.subjects.map((item, idx) => ({
+                id: String(item.id || `subj-${idx}-${Date.now()}`),
+                name: String(item.name || "সাবজেক্ট").trim() || "সাবজেক্ট",
+                minutes: clampStudyMinutes(item.minutes),
+                goalSessions: Math.min(20, Math.max(1, Number(item.goalSessions) || 1)),
+                completedSessions: Math.max(0, Number(item.completedSessions) || 0),
+                earnedAchievements: Math.max(0, Number(item.earnedAchievements) || 0)
+              }))
+            : createDefaultSubjects();
+
+          const achievements = Array.isArray(parsed.achievements)
+            ? parsed.achievements.map((ach, idx) => ({
+                id: String(ach.id || `ach-${idx}-${Date.now()}`),
+                subjectName: String(ach.subjectName || "সাবজেক্ট"),
+                minutes: clampStudyMinutes(ach.minutes),
+                tierBn: String(ach.tierBn || "ব্রোঞ্জ পদক"),
+                badge: String(ach.badge || "🥉"),
+                earnedAt: String(ach.earnedAt || "")
+              }))
+            : [];
+
+          const st = parsed.stats || {};
+          const totalMinutes = Math.max(0, Number(st.totalMinutes) || 0);
+          let todayMinutes = Math.max(0, Number(st.todayMinutes) || 0);
+          const totalSessions = Math.max(0, Number(st.totalSessions) || 0);
+          let todaySessions = Math.max(0, Number(st.todaySessions) || 0);
+          let streakDays = Math.max(0, Number(st.streakDays) || 0);
+          const lastStudyDate = st.lastStudyDate || null;
+
+          if (parsed.dateKey && parsed.dateKey !== today) {
+            todayMinutes = 0;
+            todaySessions = 0;
+            if (lastStudyDate && lastStudyDate !== today && lastStudyDate !== getYesterdayKey()) {
+              streakDays = 0;
+            }
+          }
+
+          const activeSubjectId = subjects.some((s) => s.id === parsed.activeSubjectId)
+            ? parsed.activeSubjectId
+            : subjects[0].id;
+
+          return {
+            dateKey: today,
+            muted: Boolean(parsed.muted),
+            activeSubjectId,
+            subjects,
+            achievements,
+            stats: {
+              totalMinutes,
+              todayMinutes,
+              totalSessions,
+              todaySessions,
+              streakDays,
+              lastStudyDate
+            }
+          };
+        } catch (err) {
+          console.error("Failed to load saved state:", err);
+          return fallback;
+        }
+      }
+
+      function saveState(nextState) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+        } catch (err) {
+          console.error("Failed to persist state:", err);
+        }
+      }
+
+      let appState = loadState();
+
+      // Drift-free timer controller using exact target timestamp
+      const timer = {
+        status: "idle", // "idle" | "running" | "paused" | "completed"
+        totalSeconds: MIN_STUDY_MINUTES * 60,
+        remainingSeconds: MIN_STUDY_MINUTES * 60,
+        targetEndMs: null,
+        intervalId: null,
+        cancelArmed: false,
+        cancelArmTimer: null
+      };
+
+      const els = {
+        confettiLayer: document.getElementById("confettiLayer"),
+        toastRegion: document.getElementById("toastRegion"),
+        todayDatePill: document.getElementById("todayDatePill"),
+        muteToggleBtn: document.getElementById("muteToggleBtn"),
+        muteIcon: document.getElementById("muteIcon"),
+        muteLabel: document.getElementById("muteLabel"),
+        resetTodayBtn: document.getElementById("resetTodayBtn"),
+        resetTodayLabel: document.getElementById("resetTodayLabel"),
+
+        rankBadgeIcon: document.getElementById("rankBadgeIcon"),
+        rankPositionPill: document.getElementById("rankPositionPill"),
+        rankTitleText: document.getElementById("rankTitleText"),
+        rankDescText: document.getElementById("rankDescText"),
+        rankProgressLabel: document.getElementById("rankProgressLabel"),
+        rankPercentText: document.getElementById("rankPercentText"),
+        rankProgressBar: document.getElementById("rankProgressBar"),
+        rankLadderChips: document.getElementById("rankLadderChips"),
+
+        statTotalMinutes: document.getElementById("statTotalMinutes"),
+        statTodaySub: document.getElementById("statTodaySub"),
+        statTotalAchievements: document.getElementById("statTotalAchievements"),
+        statAchievementSub: document.getElementById("statAchievementSub"),
+        statCompletedSessions: document.getElementById("statCompletedSessions"),
+        statTodaySessionsSub: document.getElementById("statTodaySessionsSub"),
+        statStreak: document.getElementById("statStreak"),
+
+        timerPanel: document.getElementById("timerPanel"),
+        activeSubjectName: document.getElementById("activeSubjectName"),
+        activeSubjectGoalText: document.getElementById("activeSubjectGoalText"),
+        timerStatusBadge: document.getElementById("timerStatusBadge"),
+        statusDot: document.getElementById("statusDot"),
+        timerStatusText: document.getElementById("timerStatusText"),
+        ringProgressCircle: document.getElementById("ringProgressCircle"),
+        countdownDisplay: document.getElementById("countdownDisplay"),
+        countdownSubLabel: document.getElementById("countdownSubLabel"),
+        countdownRewardPreview: document.getElementById("countdownRewardPreview"),
+        startPauseBtn: document.getElementById("startPauseBtn"),
+        startPauseIcon: document.getElementById("startPauseIcon"),
+        startPauseLabel: document.getElementById("startPauseLabel"),
+        cancelSessionBtn: document.getElementById("cancelSessionBtn"),
+        cancelSessionLabel: document.getElementById("cancelSessionLabel"),
+        quickSubjectSelect: document.getElementById("quickSubjectSelect"),
+
+        sessionLockBanner: document.getElementById("sessionLockBanner"),
+        subjectForm: document.getElementById("subjectForm"),
+        subjectNameInput: document.getElementById("subjectNameInput"),
+        subjectMinutesInput: document.getElementById("subjectMinutesInput"),
+        subjectGoalSessionsInput: document.getElementById("subjectGoalSessionsInput"),
+        presetButtons: Array.from(document.querySelectorAll(".preset-btn")),
+        formErrorText: document.getElementById("formErrorText"),
+        formReadyLampDot: document.getElementById("formReadyLampDot"),
+        addSubjectBtn: document.getElementById("addSubjectBtn"),
+        subjectsCountBadge: document.getElementById("subjectsCountBadge"),
+        subjectsListContainer: document.getElementById("subjectsListContainer"),
+
+        achievementsBadgeCount: document.getElementById("achievementsBadgeCount"),
+        achievementsGrid: document.getElementById("achievementsGrid")
+      };
+
+      els.ringProgressCircle.style.strokeDasharray = String(RING_CIRCUMFERENCE);
+      els.ringProgressCircle.style.strokeDashoffset = "0";
+      els.todayDatePill.textContent = formatBanglaDate();
+
+      function showToast(title, message, isReward = false) {
+        const card = document.createElement("div");
+        card.className = `toast-card ${isReward ? "is-reward" : ""}`;
+        card.innerHTML = `
+          <div class="text-xl shrink-0" aria-hidden="true">${isReward ? "🏆" : "🔔"}</div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-bold text-[#132238]">${escapeHtml(title)}</div>
+            <div class="text-xs text-[#475d7a] mt-0.5 leading-relaxed">${escapeHtml(message)}</div>
+          </div>
+        `;
+        els.toastRegion.appendChild(card);
+
+        setTimeout(() => {
+          card.style.opacity = "0";
+          card.style.transform = "translateY(10px)";
+          setTimeout(() => card.remove(), 260);
+        }, isReward ? 5200 : 3800);
+      }
+
+      function playCompletionSound() {
+        if (appState.muted) return;
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          const ctx = new AudioCtx();
+          const notes = [523.25, 659.25, 783.99, 1046.5];
+          const now = ctx.currentTime;
+
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, now + i * 0.14);
+
+            gain.gain.setValueAtTime(0.0001, now + i * 0.14);
+            gain.gain.exponentialRampToValueAtTime(0.16, now + i * 0.14 + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.14 + 0.45);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + i * 0.14);
+            osc.stop(now + i * 0.14 + 0.48);
+          });
+
+          setTimeout(() => {
+            ctx.close().catch(() => {});
+          }, 1600);
+        } catch (_) {
+          // Ignore Web Audio restrictions when blocked
+        }
+      }
+
+      function launchCelebration() {
+        const colors = ["#059669", "#2563eb", "#1e3a8a", "#0284c7", "#d97706", "#10b981"];
+        for (let i = 0; i < 34; i++) {
+          const piece = document.createElement("span");
+          piece.className = "confetti-piece";
+          const left = Math.random() * 100;
+          const size = 7 + Math.random() * 7;
+          const dur = 1.7 + Math.random() * 1.1;
+          const drift = (Math.random() - 0.5) * 150;
+          const color = colors[i % colors.length];
+
+          piece.style.left = `${left}%`;
+          piece.style.width = `${size}px`;
+          piece.style.height = `${size * 0.65}px`;
+          piece.style.backgroundColor = color;
+          piece.style.setProperty("--dur", `${dur}s`);
+          piece.style.setProperty("--drift", `${drift}px`);
+
+          els.confettiLayer.appendChild(piece);
+          setTimeout(() => piece.remove(), (dur + 0.2) * 1000);
+        }
+      }
+
+      function getActiveSubject() {
+        return appState.subjects.find((s) => s.id === appState.activeSubjectId) || appState.subjects[0] || null;
+      }
+
+      function isSessionLocked() {
+        return timer.status === "running" || timer.status === "paused";
+      }
+
+      function clearTimerInterval() {
+        if (timer.intervalId !== null) {
+          clearInterval(timer.intervalId);
+          timer.intervalId = null;
+        }
+      }
+
+      function resetCancelArm() {
+        timer.cancelArmed = false;
+        if (timer.cancelArmTimer) {
+          clearTimeout(timer.cancelArmTimer);
+          timer.cancelArmTimer = null;
+        }
+      }
+
+      function syncTimerToSubject(subj, keepCompletedBanner = false) {
+        clearTimerInterval();
+        resetCancelArm();
+        const mins = subj ? clampStudyMinutes(subj.minutes) : MIN_STUDY_MINUTES;
+        timer.totalSeconds = mins * 60;
+        timer.remainingSeconds = timer.totalSeconds;
+        timer.targetEndMs = null;
+        if (!keepCompletedBanner || timer.status !== "completed") {
+          timer.status = "idle";
+        }
+      }
+
+      function updateStreak() {
+        const today = getTodayKey();
+        const yesterday = getYesterdayKey();
+        if (appState.stats.lastStudyDate === today) {
+          return;
+        }
+        if (appState.stats.lastStudyDate === yesterday) {
+          appState.stats.streakDays = Math.max(1, appState.stats.streakDays + 1);
+        } else {
+          appState.stats.streakDays = 1;
+        }
+        appState.stats.lastStudyDate = today;
+      }
+
+      function getRankInfo(achievementCount) {
+        let current = RANK_TIERS[0];
+        let next = null;
+        for (let i = 0; i < RANK_TIERS.length; i++) {
+          if (achievementCount >= RANK_TIERS[i].minAchievements) {
+            current = RANK_TIERS[i];
+            next = RANK_TIERS[i + 1] || null;
+          }
+        }
+        return { current, next };
+      }
+
+      function completeLegitimateSession() {
+        clearTimerInterval();
+        resetCancelArm();
+        timer.remainingSeconds = 0;
+        timer.targetEndMs = null;
+        timer.status = "completed";
+
+        const subj = getActiveSubject();
+        const minutesDone = subj ? clampStudyMinutes(subj.minutes) : MIN_STUDY_MINUTES;
+        const subjectName = subj ? subj.name : "স্টাডি সেশন";
+
+        const prevRank = getRankInfo(appState.achievements.length).current;
+
+        if (subj) {
+          subj.completedSessions += 1;
+          subj.earnedAchievements += 1;
+        }
+
+        appState.dateKey = getTodayKey();
+        appState.stats.totalMinutes += minutesDone;
+        appState.stats.todayMinutes += minutesDone;
+        appState.stats.totalSessions += 1;
+        appState.stats.todaySessions += 1;
+        updateStreak();
+
+        const medal = getMedalStyle(minutesDone);
+        const newAchievement = {
+          id: `ach-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          subjectName,
+          minutes: minutesDone,
+          tierBn: medal.tierBn,
+          badge: medal.badge,
+          earnedAt: `${formatBanglaDate()} · ${formatBanglaTimeNow()}`
+        };
+        appState.achievements.unshift(newAchievement);
+
+        const nextRank = getRankInfo(appState.achievements.length).current;
+        const rankedUp = nextRank.level > prevRank.level;
+
+        saveState(appState);
+        playCompletionSound();
+        launchCelebration();
+        renderAll();
+
+        if (rankedUp) {
+          showToast(
+            `নতুন পজিশন অর্জিত! ${nextRank.icon} ${nextRank.titleBn}`,
+            `"${subjectName}" (${minutesDone} মিনিট) সম্পন্ন করে ${medal.badge} ${medal.tierBn} ও নতুন পজিশন পেলেন!`,
+            true
+          );
+        } else {
+          showToast(
+            `অ্যাচিভমেন্ট অর্জিত! ${medal.badge} ${subjectName}`,
+            `${minutesDone} মিনিটের টাইমার 00:00 শেষ হয়েছে! নতুন "${medal.tierBn}" অ্যাচিভমেন্ট যুক্ত হয়েছে।`,
+            true
+          );
+        }
+      }
+
+      function tickCountdown() {
+        if (timer.status !== "running" || timer.targetEndMs === null) return;
+        const msLeft = timer.targetEndMs - Date.now();
+        const secLeft = Math.max(0, Math.ceil(msLeft / 1000));
+
+        if (secLeft <= 0) {
+          completeLegitimateSession();
+          return;
+        }
+
+        if (secLeft !== timer.remainingSeconds) {
+          timer.remainingSeconds = secLeft;
+          renderTimerSection();
+        }
+      }
+
+      function startOrResumeTimer() {
+        const subj = getActiveSubject();
+        if (!subj) {
+          els.formErrorText.textContent = "টাইমার শুরু করার আগে একটি সাবজেক্ট যোগ করুন।";
+          return;
+        }
+
+        resetCancelArm();
+
+        if (timer.status === "idle" || timer.status === "completed" || timer.remainingSeconds <= 0) {
+          timer.totalSeconds = clampStudyMinutes(subj.minutes) * 60;
+          timer.remainingSeconds = timer.totalSeconds;
+        }
+
+        timer.status = "running";
+        timer.targetEndMs = Date.now() + timer.remainingSeconds * 1000;
+        clearTimerInterval();
+        timer.intervalId = setInterval(tickCountdown, 150);
+        renderAll();
+      }
+
+      function pauseTimer() {
+        if (timer.status !== "running") return;
+        if (timer.targetEndMs !== null) {
+          timer.remainingSeconds = Math.max(1, Math.ceil((timer.targetEndMs - Date.now()) / 1000));
+        }
+        timer.targetEndMs = null;
+        clearTimerInterval();
+        timer.status = "paused";
+        renderAll();
+      }
+
+      function handleCancelOrResetSession() {
+        const subj = getActiveSubject();
+        const activeOrPartial =
+          timer.status === "running" ||
+          timer.status === "paused" ||
+          (timer.remainingSeconds > 0 && timer.remainingSeconds < timer.totalSeconds);
+
+        if (activeOrPartial && !timer.cancelArmed) {
+          timer.cancelArmed = true;
+          renderTimerSection();
+          showToast(
+            "সতর্কতা: বাতিল করলে ০ অ্যাচিভমেন্ট!",
+            "সেশন শেষ না করে বাতিল করলে কোনো অ্যাচিভমেন্ট পাবেন না। নিশ্চিত করতে আবার রিসেট/বাতিল চাপুন।"
+          );
+          timer.cancelArmTimer = setTimeout(() => {
+            timer.cancelArmed = false;
+            renderTimerSection();
+          }, 4200);
+          return;
+        }
+
+        const wasCancelledMidway = activeOrPartial;
+        syncTimerToSubject(subj, false);
+        renderAll();
+
+        if (wasCancelledMidway) {
+          showToast("সেশন বাতিল হয়েছে", "সেশন বাতিল করায় কোনো অ্যাচিভমেন্ট যোগ হয়নি।");
+        }
+      }
+
+      function selectSubject(subjectId, autoStart = false) {
+        if (isSessionLocked()) {
+          showToast("সেশন লক করা আছে", "সক্রিয় সেশন চলাকালীন অন্য সাবজেক্টে যাওয়া যাবে না।");
+          return;
+        }
+        const found = appState.subjects.find((s) => s.id === subjectId);
+        if (!found) return;
+        appState.activeSubjectId = found.id;
+        syncTimerToSubject(found, false);
+        saveState(appState);
+        renderAll();
+        if (autoStart) {
+          startOrResumeTimer();
+        }
+      }
+
+      function renderRankSection() {
+        const count = appState.achievements.length;
+        const { current, next } = getRankInfo(count);
+
+        els.rankBadgeIcon.textContent = current.icon;
+        els.rankPositionPill.textContent = `ধাপ ${current.level} / ${RANK_TIERS.length}`;
+        els.rankTitleText.textContent = current.titleBn;
+        els.rankDescText.textContent = current.desc;
+
+        if (next) {
+          const span = Math.max(1, next.minAchievements - current.minAchievements);
+          const doneInTier = Math.max(0, count - current.minAchievements);
+          const pct = Math.min(100, Math.round((doneInTier / span) * 100));
+          els.rankProgressLabel.textContent = `পরবর্তী ধাপ (${next.titleBn}): ${count} / ${next.minAchievements} অ্যাচিভমেন্ট`;
+          els.rankPercentText.textContent = `${pct}%`;
+          els.rankProgressBar.style.width = `${pct}%`;
+        } else {
+          els.rankProgressLabel.textContent = `সর্বোচ্চ পজিশন অর্জিত (${count}টি অ্যাচিভমেন্ট)`;
+          els.rankPercentText.textContent = `১০০%`;
+          els.rankProgressBar.style.width = `100%`;
+        }
+
+        els.rankLadderChips.innerHTML = RANK_TIERS.map((tier) => {
+          const unlocked = count >= tier.minAchievements;
+          const isCurrent = tier.level === current.level;
+          const cls = isCurrent
+            ? "bg-blue-200/80 text-blue-950 border-blue-500/60"
+            : unlocked
+              ? "bg-emerald-100/80 text-emerald-900 border-emerald-400/70"
+              : "bg-[#e5edf7] text-[#52698a] border-blue-900/15";
+          return `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${cls}">
+              <span aria-hidden="true">${tier.icon}</span>
+              <span>${escapeHtml(tier.titleBn)}</span>
+              <span class="opacity-80 bn-num">(${tier.minAchievements}+)</span>
+            </span>
+          `;
+        }).join("");
+      }
+
+      function renderStatsSection() {
+        const st = appState.stats;
+        const achCount = appState.achievements.length;
+
+        els.statTotalMinutes.textContent = `${st.totalMinutes} মিনিট`;
+        els.statTodaySub.textContent = `আজ: ${st.todayMinutes} মিনিট`;
+
+        els.statTotalAchievements.textContent = `${achCount}টি পদক`;
+        els.statAchievementSub.textContent = achCount > 0 ? "পজিশন সক্রিয় রয়েছে" : "প্রথম সেশন শেষ করুন";
+
+        els.statCompletedSessions.textContent = `${st.totalSessions}টি`;
+        els.statTodaySessionsSub.textContent = `আজ সম্পন্ন: ${st.todaySessions}টি`;
+
+        els.statStreak.textContent = `${st.streakDays} দিন`;
+      }
+
+      function renderTimerSection() {
+        const subj = getActiveSubject();
+        const locked = isSessionLocked();
+
+        if (subj) {
+          const mins = clampStudyMinutes(subj.minutes);
+          els.activeSubjectName.textContent = subj.name;
+          els.activeSubjectGoalText.textContent = `নির্ধারিত সময়: ${mins} মিনিট · সেশন: ${subj.completedSessions}/${subj.goalSessions} · পদক: ${subj.earnedAchievements}টি`;
+          els.countdownSubLabel.textContent = `লক্ষ্য: ${mins} মিনিট (সর্বনিম্ন ১৫মি)`;
+          els.countdownRewardPreview.textContent = `00:00 শেষ হলে ${getMedalStyle(mins).badge} অ্যাচিভমেন্ট`;
+        } else {
+          els.activeSubjectName.textContent = "কোনো সাবজেক্ট নেই";
+          els.activeSubjectGoalText.textContent = "পাশের ফর্ম থেকে সাবজেক্ট যোগ করুন";
+          els.countdownSubLabel.textContent = "লক্ষ্য: ১৫ মিনিট";
+          els.countdownRewardPreview.textContent = "সাবজেক্ট নির্বাচন করুন";
+        }
+
+        els.countdownDisplay.textContent = formatCountdown(timer.remainingSeconds);
+
+        const ratio = timer.totalSeconds > 0
+          ? Math.max(0, Math.min(1, timer.remainingSeconds / timer.totalSeconds))
+          : 1;
+        const offset = RING_CIRCUMFERENCE * (1 - ratio);
+        els.ringProgressCircle.style.strokeDashoffset = String(offset);
+
+        els.ringProgressCircle.classList.remove("is-paused", "is-completed");
+        if (timer.status === "running") {
+          els.timerStatusText.textContent = "চলমান (লকড)";
+          els.statusDot.className = "w-2 h-2 rounded-full bg-emerald-600 animate-ping";
+          els.startPauseIcon.textContent = "⏸";
+          els.startPauseLabel.textContent = "Pause করুন";
+        } else if (timer.status === "paused") {
+          els.timerStatusText.textContent = "পজ করা আছে";
+          els.statusDot.className = "w-2 h-2 rounded-full bg-amber-600";
+          els.ringProgressCircle.classList.add("is-paused");
+          els.startPauseIcon.textContent = "▶";
+          els.startPauseLabel.textContent = "Resume করুন";
+        } else if (timer.status === "completed") {
+          els.timerStatusText.textContent = "সম্পন্ন! অ্যাচিভমেন্ট যুক্ত";
+          els.statusDot.className = "w-2 h-2 rounded-full bg-emerald-600";
+          els.ringProgressCircle.classList.add("is-completed");
+          els.startPauseIcon.textContent = "▶";
+          els.startPauseLabel.textContent = "আবার শুরু করুন";
+        } else {
+          els.timerStatusText.textContent = "প্রস্তুত";
+          els.statusDot.className = "w-2 h-2 rounded-full bg-blue-700";
+          els.startPauseIcon.textContent = "▶";
+          els.startPauseLabel.textContent = "টাইমার শুরু করুন";
+        }
+
+        els.cancelSessionLabel.textContent = timer.cancelArmed
+          ? "⚠️ নিশ্চিত বাতিল (০ পদক)"
+          : "রিসেট / সেশন বাতিল";
+
+        els.sessionLockBanner.classList.toggle("hidden", !locked);
+        els.quickSubjectSelect.disabled = locked;
+        els.subjectNameInput.disabled = locked;
+        els.subjectMinutesInput.disabled = locked;
+        els.subjectGoalSessionsInput.disabled = locked;
+        els.addSubjectBtn.disabled = locked;
+        els.resetTodayBtn.disabled = locked;
+        els.presetButtons.forEach((btn) => {
+          btn.disabled = locked;
+        });
+
+        [
+          els.quickSubjectSelect,
+          els.subjectNameInput,
+          els.subjectMinutesInput,
+          els.subjectGoalSessionsInput,
+          els.addSubjectBtn,
+          els.resetTodayBtn,
+          ...els.presetButtons
+        ].forEach((el) => {
+          el.classList.toggle("opacity-50", locked);
+          el.classList.toggle("cursor-not-allowed", locked);
+        });
+      }
+
+      function renderSubjectsSection() {
+        const locked = isSessionLocked();
+        els.subjectsCountBadge.textContent = `${appState.subjects.length}টি সাবজেক্ট`;
+
+        els.quickSubjectSelect.innerHTML = appState.subjects
+          .map((s) => `<option value="${escapeHtml(s.id)}" ${s.id === appState.activeSubjectId ? "selected" : ""}>${escapeHtml(s.name)} (${s.minutes} মিনিট)</option>`)
+          .join("");
+
+        if (!appState.subjects.length) {
+          els.subjectsListContainer.innerHTML = `
+            <div class="text-center py-8 px-4 rounded-2xl border border-dashed border-blue-900/20 text-[#52698a] text-sm bg-[#f2f6fc]">
+              কোনো সাবজেক্ট নেই। উপরের ফর্ম থেকে নিজের সাবজেক্ট ও মিনিট (সর্বনিম্ন ১৫ মিনিট) যোগ করুন।
+            </div>
+          `;
+          return;
+        }
+
+        els.subjectsListContainer.innerHTML = appState.subjects
+          .map((subj) => {
+            const isSelected = subj.id === appState.activeSubjectId;
+            const isRunningThis = isSelected && timer.status === "running";
+            const goalMet = subj.completedSessions >= subj.goalSessions;
+            const pct = Math.min(100, Math.round((subj.completedSessions / Math.max(1, subj.goalSessions)) * 100));
+            const medal = getMedalStyle(subj.minutes);
+
+            return `
+              <article class="p-4 rounded-2xl border transition ${
+                goalMet
+                  ? "subject-card-completed"
+                  : isSelected
+                    ? "bg-blue-100/65 border-blue-900/35"
+                    : "bg-[#f2f6fc] border-blue-900/15 hover:border-blue-900/25"
+              }">
+                <div class="flex flex-wrap items-start justify-between gap-2.5">
+                  <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <h4 class="text-base font-bold text-[#132238]">${escapeHtml(subj.name)}</h4>
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100/90 text-blue-950 border border-blue-200 bn-num">
+                        ${subj.minutes} মিনিট
+                      </span>
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100/80 text-amber-950 border border-amber-200 bn-num">
+                        ${medal.badge} ${subj.earnedAchievements} পদক
+                      </span>
+                      ${
+                        goalMet
+                          ? `<span class="subject-completed-pill inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold"><span class="subject-glow-dot" aria-hidden="true"></span><span>✓ লক্ষ্য পূর্ণ</span></span>`
+                          : ""
+                      }
+                    </div>
+                    <div class="text-xs ${goalMet ? "text-emerald-800 font-semibold" : "text-[#52698a]"} bn-num mt-1">
+                      সেশন: ${subj.completedSessions} / ${subj.goalSessions} সম্পন্ন
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      data-action="start-or-pause"
+                      data-id="${escapeHtml(subj.id)}"
+                      ${locked && !isSelected ? "disabled" : ""}
+                      class="px-3.5 py-2 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 transition cursor-pointer ${
+                        locked && !isSelected ? "opacity-40 cursor-not-allowed" : ""
+                      }"
+                      style="background: linear-gradient(135deg, #2563eb, #1e3a8a);"
+                    >
+                      <span>${isRunningThis ? "⏸" : "▶"}</span>
+                      <span>${isRunningThis ? "Pause" : "শুরু"}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      data-action="delete"
+                      data-id="${escapeHtml(subj.id)}"
+                      ${locked ? "disabled" : ""}
+                      aria-label="${escapeHtml(subj.name)} মুছে ফেলুন"
+                      class="px-3 py-2 rounded-xl text-xs font-bold bg-rose-50/90 hover:bg-rose-100 text-rose-800 border border-rose-300/80 transition cursor-pointer ${
+                        locked ? "opacity-40 cursor-not-allowed" : ""
+                      }"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                <div class="w-full h-2 rounded-full bg-[#dce6f3] overflow-hidden mt-3">
+                  <div
+                    class="h-full rounded-full transition-all duration-300"
+                    style="width: ${pct}%; background: ${
+                      goalMet
+                        ? "linear-gradient(90deg, #059669, #10b981, #34d399)"
+                        : "linear-gradient(90deg, #2563eb, #1e3a8a)"
+                    };"
+                  ></div>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderAchievementsSection() {
+        const list = appState.achievements;
+        els.achievementsBadgeCount.textContent = `মোট ${list.length}টি অ্যাচিভমেন্ট`;
+
+        if (!list.length) {
+          els.achievementsGrid.innerHTML = `
+            <div class="col-span-full text-center py-9 px-4 rounded-2xl border border-dashed border-blue-900/20 text-[#52698a] text-sm bg-[#f2f6fc]">
+              এখনো কোনো অ্যাচিভমেন্ট অর্জিত হয়নি। যেকোনো সাবজেক্টের টাইমার শুরু করে <strong class="text-[#132238] bn-num">00:00</strong> পর্যন্ত শেষ করুন — সাথে সাথে আপনার প্রথম পদক ও পজিশন আপডেট হবে!
+            </div>
+          `;
+          return;
+        }
+
+        els.achievementsGrid.innerHTML = list
+          .map((ach, idx) => {
+            const medal = getMedalStyle(ach.minutes);
+            return `
+              <article class="p-4 rounded-2xl border ${medal.accentClass} flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-[#f9fbfe] border border-blue-900/15 flex items-center justify-center text-2xl shrink-0" aria-hidden="true">
+                  ${escapeHtml(ach.badge || medal.badge)}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wide opacity-90">
+                      ${escapeHtml(ach.tierBn || medal.tierBn)}
+                    </span>
+                    <span class="text-[11px] font-semibold opacity-75 bn-num">#${list.length - idx}</span>
+                  </div>
+                  <h3 class="text-base font-bold text-[#132238] truncate mt-0.5">${escapeHtml(ach.subjectName)}</h3>
+                  <div class="text-xs font-semibold text-emerald-800 bn-num mt-0.5">
+                    ${ach.minutes} মিনিট ফোকাস সম্পন্ন
+                  </div>
+                  ${
+                    ach.earnedAt
+                      ? `<div class="text-[11px] text-[#52698a] bn-num mt-1">${escapeHtml(ach.earnedAt)}</div>`
+                      : ""
+                  }
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderMuteButton() {
+        els.muteToggleBtn.setAttribute("aria-pressed", String(appState.muted));
+        if (appState.muted) {
+          els.muteIcon.textContent = "🔇";
+          els.muteLabel.textContent = "সাউন্ড বন্ধ";
+        } else {
+          els.muteIcon.textContent = "🔔";
+          els.muteLabel.textContent = "সাউন্ড চালু";
+        }
+      }
+
+      // Emerald form glow stays ON when validly filled (>=15 min), OFF when incomplete (no text labels)
+      function isSubjectFormComplete() {
+        const name = els.subjectNameInput.value.trim();
+        const minutesRaw = els.subjectMinutesInput.value.trim();
+        const goalRaw = els.subjectGoalSessionsInput.value.trim();
+        const minutes = Number(minutesRaw);
+        const goalSessions = Number(goalRaw);
+
+        const hasName = name.length > 0;
+        const hasValidMinutes =
+          minutesRaw !== "" &&
+          Number.isFinite(minutes) &&
+          minutes >= MIN_STUDY_MINUTES &&
+          minutes <= MAX_STUDY_MINUTES;
+        const hasValidSessions =
+          goalRaw !== "" &&
+          Number.isFinite(goalSessions) &&
+          goalSessions >= 1 &&
+          goalSessions <= 20;
+
+        return hasName && hasValidMinutes && hasValidSessions;
+      }
+
+      function renderFormCompletionGlow() {
+        const complete = isSubjectFormComplete();
+        els.subjectForm.classList.toggle("form-complete-glow", complete);
+        els.formReadyLampDot.classList.toggle("is-lit", complete);
+      }
+
+      function syncPresetHighlight(currentMins) {
+        els.presetButtons.forEach((b) => {
+          const val = Number(b.dataset.preset);
+          const active = val === currentMins;
+          b.className = active
+            ? "preset-btn py-2 rounded-xl text-xs font-bold bg-blue-900 text-white border border-blue-900 transition cursor-pointer bn-num"
+            : "preset-btn py-2 rounded-xl text-xs font-bold bg-[#f9fbfe] hover:bg-blue-100/70 text-[#132238] border border-blue-900/20 transition cursor-pointer bn-num";
+        });
+      }
+
+      function renderAll() {
+        renderMuteButton();
+        renderRankSection();
+        renderStatsSection();
+        renderTimerSection();
+        renderSubjectsSection();
+        renderAchievementsSection();
+        renderFormCompletionGlow();
+      }
+
+      els.subjectNameInput.addEventListener("input", () => {
+        if (els.formErrorText.textContent && els.subjectNameInput.value.trim()) {
+          els.formErrorText.textContent = "";
+        }
+        renderFormCompletionGlow();
+      });
+
+      els.subjectMinutesInput.addEventListener("input", () => {
+        const raw = els.subjectMinutesInput.value.trim();
+        const num = Number(raw);
+        if (raw !== "" && Number.isFinite(num) && num < MIN_STUDY_MINUTES) {
+          els.formErrorText.textContent = `সর্বনিম্ন টাইমার সময় ১৫ মিনিট হতে হবে (আপনি ${num} মিনিট লিখেছেন)।`;
+        } else if (els.formErrorText.textContent) {
+          els.formErrorText.textContent = "";
+        }
+        syncPresetHighlight(num);
+        renderFormCompletionGlow();
+      });
+
+      els.subjectMinutesInput.addEventListener("blur", () => {
+        const raw = els.subjectMinutesInput.value.trim();
+        if (raw === "") return;
+        const num = Number(raw);
+        if (Number.isFinite(num) && num < MIN_STUDY_MINUTES) {
+          els.subjectMinutesInput.value = String(MIN_STUDY_MINUTES);
+          els.formErrorText.textContent = "সর্বনিম্ন ১৫ মিনিট নির্ধারণ করা হয়েছে।";
+          syncPresetHighlight(MIN_STUDY_MINUTES);
+          renderFormCompletionGlow();
+        }
+      });
+
+      els.subjectGoalSessionsInput.addEventListener("input", renderFormCompletionGlow);
+
+      els.presetButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (isSessionLocked()) return;
+          const mins = clampStudyMinutes(Number(btn.dataset.preset));
+          els.subjectMinutesInput.value = String(mins);
+          els.formErrorText.textContent = "";
+          syncPresetHighlight(mins);
+          renderFormCompletionGlow();
+        });
+      });
+
+      els.subjectForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (isSessionLocked()) {
+          showToast("সেশন লক করা আছে", "সক্রিয় সেশন চলাকালীন নতুন সাবজেক্ট যোগ করা যাবে না।");
+          return;
+        }
+
+        const name = els.subjectNameInput.value.trim();
+        const minutes = Number(els.subjectMinutesInput.value);
+        const goalSessions = Number(els.subjectGoalSessionsInput.value);
+
+        if (!name) {
+          els.formErrorText.textContent = "অনুগ্রহ করে সাবজেক্টের নাম লিখুন।";
+          els.subjectNameInput.focus();
+          renderFormCompletionGlow();
+          return;
+        }
+        if (!Number.isFinite(minutes) || minutes < MIN_STUDY_MINUTES) {
+          els.formErrorText.textContent = "সর্বনিম্ন ফোকাস সময় ১৫ মিনিট হতে হবে। ১৫ মিনিট বা তার বেশি দিন।";
+          els.subjectMinutesInput.focus();
+          renderFormCompletionGlow();
+          return;
+        }
+        if (minutes > MAX_STUDY_MINUTES) {
+          els.formErrorText.textContent = `সর্বোচ্চ সময় ${MAX_STUDY_MINUTES} মিনিটের মধ্যে হতে হবে।`;
+          els.subjectMinutesInput.focus();
+          renderFormCompletionGlow();
+          return;
+        }
+        if (!Number.isFinite(goalSessions) || goalSessions < 1 || goalSessions > 20) {
+          els.formErrorText.textContent = "টার্গেট সেশন ১ থেকে ২০-এর মধ্যে হতে হবে।";
+          els.subjectGoalSessionsInput.focus();
+          renderFormCompletionGlow();
+          return;
+        }
+
+        els.formErrorText.textContent = "";
+
+        const cleanMinutes = Math.round(minutes);
+        const newSubject = {
+          id: `subj-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          name,
+          minutes: cleanMinutes,
+          goalSessions: Math.round(goalSessions),
+          completedSessions: 0,
+          earnedAchievements: 0
+        };
+
+        appState.subjects.unshift(newSubject);
+        appState.activeSubjectId = newSubject.id;
+        syncTimerToSubject(newSubject, false);
+        saveState(appState);
+
+        els.subjectNameInput.value = "";
+        renderAll();
+        els.subjectNameInput.focus();
+        showToast("সাবজেক্ট যোগ হয়েছে", `"${newSubject.name}" (${newSubject.minutes} মিনিট) টাইমারের জন্য প্রস্তুত।`);
+      });
+
+      els.subjectsListContainer.addEventListener("click", (e) => {
+        const actionBtn = e.target.closest("button[data-action]");
+        if (!actionBtn) return;
+
+        const action = actionBtn.dataset.action;
+        const id = actionBtn.dataset.id;
+        const subj = appState.subjects.find((s) => s.id === id);
+        if (!subj) return;
+
+        if (action === "start-or-pause") {
+          if (appState.activeSubjectId === id && timer.status === "running") {
+            pauseTimer();
+          } else {
+            selectSubject(id, true);
+            els.timerPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        } else if (action === "delete") {
+          if (isSessionLocked()) {
+            showToast("সেশন লক করা আছে", "সক্রিয় সেশন চলাকালীন সাবজেক্ট মোছা যাবে না।");
+            return;
+          }
+          appState.subjects = appState.subjects.filter((s) => s.id !== id);
+          if (appState.activeSubjectId === id) {
+            const nextSubj = appState.subjects[0] || null;
+            appState.activeSubjectId = nextSubj ? nextSubj.id : null;
+            syncTimerToSubject(nextSubj, false);
+          }
+          saveState(appState);
+          renderAll();
+          showToast("সাবজেক্ট মুছে ফেলা হয়েছে", `"${subj.name}" তালিকা থেকে সরানো হয়েছে।`);
+        }
+      });
+
+      els.quickSubjectSelect.addEventListener("change", (e) => {
+        if (e.target.value) {
+          selectSubject(e.target.value, false);
+        }
+      });
+
+      els.startPauseBtn.addEventListener("click", () => {
+        if (timer.status === "running") {
+          pauseTimer();
+        } else {
+          startOrResumeTimer();
+        }
+      });
+
+      els.cancelSessionBtn.addEventListener("click", handleCancelOrResetSession);
+
+      els.muteToggleBtn.addEventListener("click", () => {
+        appState.muted = !appState.muted;
+        saveState(appState);
+        renderMuteButton();
+      });
+
+      let confirmTodayReset = false;
+      let confirmTodayResetTimer = null;
+
+      els.resetTodayBtn.addEventListener("click", () => {
+        if (isSessionLocked()) {
+          showToast("সেশন লক করা আছে", "আগে বর্তমান সেশন শেষ বা বাতিল করুন।");
+          return;
+        }
+        if (!confirmTodayReset) {
+          confirmTodayReset = true;
+          els.resetTodayLabel.textContent = "নিশ্চিত রিসেট করতে আবার চাপুন";
+          showToast("আজকের হিসাব রিসেট", "আজকের মিনিট ও সেশনের হিসাব শূন্য করতে আবার বাটনটি চাপুন।");
+          confirmTodayResetTimer = setTimeout(() => {
+            confirmTodayReset = false;
+            els.resetTodayLabel.textContent = "আজকের অগ্রগতি রিসেট";
+          }, 4000);
+          return;
+        }
+
+        confirmTodayReset = false;
+        if (confirmTodayResetTimer) clearTimeout(confirmTodayResetTimer);
+        els.resetTodayLabel.textContent = "আজকের অগ্রগতি রিসেট";
+
+        appState.stats.todayMinutes = 0;
+        appState.stats.todaySessions = 0;
+        saveState(appState);
+        renderAll();
+        showToast("আজকের অগ্রগতি রিসেট হয়েছে", "আপনার অর্জিত অ্যাচিভমেন্ট ও পজিশন অক্ষত রয়েছে।");
+      });
+
+      syncTimerToSubject(getActiveSubject(), false);
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
